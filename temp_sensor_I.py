@@ -21,7 +21,7 @@ print("Loop startet")
 
 # Schleife für ankommendes Datenpaket
 for i in range(6):
-    list_a = []  # Liste durchläuft 2x loop, um Temp und Feuchte zu speichern
+    list_a = []  # Liste durchläuft 2x loop, um Temp und Feuchte zu speichern.
     
     list_a.append(time.ctime())
     for i in range(2):
