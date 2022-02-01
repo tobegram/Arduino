@@ -8,10 +8,8 @@ import csv
 # Erzeugen der CSV Datei
 data_file = 'data.csv'
 
-# Initialisieren der Daten-Liste und schreiben des Tabellenkopfes in die csv Datei
-data_list = ["Datum", "Temperatur [°C]", "Feuchte [%]"]
-
-
+# Erstellen einer leeren List für Datem vom Arduino
+data_list = []
 
 # Arduino Objekt wird erzeugt
 # Print Statement zur Kontrolle des Kommunikation zum Arduino
@@ -20,7 +18,7 @@ time.sleep(2)
 print("Loop startet")
 
 # Schleife für ankommendes Datenpaket
-for i in range(6):
+for i in range(100):
     list_a = []  # Liste durchläuft 2x loop, um Temp und Feuchte zu speichern.
     
     list_a.append(time.ctime())
@@ -31,16 +29,14 @@ for i in range(6):
         list_a.append(data_clean)
     
     data_list.append(list_a)
-    print(data_list)
     
-            
+
+with open(data_file, 'w', encoding='UTF8', newline="") as file:
+    header = ['Datum', 'Temperatur', 'Feuchte']
+    writer = csv.writer(file)
+    writer.writerow(header)
+    writer.writerows(data_list)
     
-    
-    with open(data_file, 'w') as file:
-        writer = csv.writer(file, delimiter=',')
-        writer.writerow(data_list)
-    
-    file.close
 
 print("Loop endet")
 
