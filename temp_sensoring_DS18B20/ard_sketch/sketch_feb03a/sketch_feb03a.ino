@@ -37,19 +37,17 @@ void setup(void) {
     return;
   }
   Serial.println("card initialized.");
+  
+  // write header into csv file
+  dataFile = SD.open("datalog.csv", FILE_WRITE);
+  dataFile.print("Datum");
+  dataFile.print(",");
+  dataFile.println("Temperatur");
 
-  //write down the date (year / month / day         prints only the start, so if the logger runs for sevenal days you only findt the start back at the begin.
-  now = RTC.now();
-  dataFile = SD.open("datalog.txt", FILE_WRITE);
-  dataFile.print("Start logging on: ");
-  dataFile.print(now.year(),DEC);
-  dataFile.print('/');
-  dataFile.print(now.month(),DEC);
-  dataFile.print('/');
-  dataFile.print(now.day(),DEC);
-  dataFile.println(" ");
-  dataFile.println("Celsius              Time");
-  dataFile.close();
+  // doublecheck on serial monitor
+  Serial.print("Datum");
+  Serial.print(",");
+  Serial.println("Temperatur");
 }
 
 void loop(void) {
@@ -60,23 +58,31 @@ void loop(void) {
   now = RTC.now();
   
   //open file to log data in.
-   dataFile = SD.open("datalog.txt", FILE_WRITE);
+  dataFile = SD.open("datalog.csv", FILE_WRITE);
 
   // if the file is available, write to it:
   // log the temperature and time.
   if (dataFile) {
-    dataFile.print(celsius);
-    dataFile.print("                 ");
     
+    dataFile.print(now.month(),DEC);
+    dataFile.print(" ");
+    dataFile.print(now.day(),DEC);
+    dataFile.print(" ");
     dataFile.print(now.hour(),DEC);
     dataFile.print(":");
     dataFile.print(now.minute(),DEC);
     dataFile.print(":");
-    dataFile.println(now.second(),DEC);
+    dataFile.print(now.second(),DEC);
+    dataFile.print(" ");
+    dataFile.print(now.year(),DEC);
+    dataFile.print(",");
+    dataFile.println(celsius);
+    
+    
+    
    
     dataFile.close();
-    // print to the serial port too:
-    Serial.println("data stored");
+    
   }
   // if the file isn't open, pop up an error:
   else {
@@ -167,9 +173,20 @@ void pickUpTemperature(){
     //// default is 12 bit resolution, 750 ms conversion time
   }
   celsius = (float)raw / 16.0;
-  Serial.print("  Temperature = ");
-  Serial.print(celsius);
-  Serial.print(" Celsius, ");
+  
+  Serial.print(now.month(),DEC);
+  Serial.print(" ");
+  Serial.print(now.day(),DEC);
+  Serial.print(" ");
+  Serial.print(now.hour(),DEC);
+  Serial.print(":");
+  Serial.print(now.minute(),DEC);
+  Serial.print(":");
+  Serial.print(now.second(),DEC);
+  Serial.print(" ");
+  Serial.print(now.year(),DEC);
+  Serial.print(",");
+  Serial.println(celsius);
   
   
 }
