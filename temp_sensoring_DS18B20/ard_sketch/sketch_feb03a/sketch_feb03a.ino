@@ -3,12 +3,16 @@
 #include <SD.h>
 #include <Wire.h>
 #include "RTClib.h"
-const int chipSelect = 10; //cs or the save select pin from the sd shield is connected to 10.
+
+//cs or the save select pin from the sd shield is connected to 10.
+const int chipSelect = 10; 
+
+// temperature sensor on pin 2
+OneWire  d_pin(2);  
+
+
+float celsius;
 RTC_DS1307 RTC;
-float celsius, fahrenheit;
-
-OneWire  ds(2 );  // temperature senor on pin 8 (a 4.7K resistor is necessary) //
-
 File dataFile;
 DateTime now;
 
@@ -17,17 +21,16 @@ void setup(void) {
   //setup clock
   Wire.begin();
   RTC.begin();
-//check or the Real Time Clock is on
+  //check if Real Time Clock is on
   if (! RTC.isrunning()) {
     Serial.println("RTC is NOT running!");
     // following line sets the RTC to the date & time this sketch was compiled
     // uncomment it & upload to set the time, date and start run the RTC!
     RTC.adjust(DateTime(__DATE__, __TIME__));
   }
-//setup SD card
-   Serial.print("Initializing SD card...");
-
+  //setup SD card
   // see if the SD card is present and can be initialized:
+  Serial.print("Initializing SD card...");
   if (!SD.begin(chipSelect)) {
     Serial.println("Card failed, or not present");
     // don't do anything more:
@@ -36,24 +39,24 @@ void setup(void) {
   Serial.println("card initialized.");
 
   //write down the date (year / month / day         prints only the start, so if the logger runs for sevenal days you only findt the start back at the begin.
-    now = RTC.now();
-    dataFile = SD.open("datalog.txt", FILE_WRITE);
-    dataFile.print("Start logging on: ");
-    dataFile.print(now.year(),DEC);
-    dataFile.print('/');
-    dataFile.print(now.month(),DEC);
-    dataFile.print('/');
-    dataFile.print(now.day(),DEC);
-    dataFile.println(" ");
-    dataFile.println("Celsius              Time");
-    dataFile.close();
+  now = RTC.now();
+  dataFile = SD.open("datalog.txt", FILE_WRITE);
+  dataFile.print("Start logging on: ");
+  dataFile.print(now.year(),DEC);
+  dataFile.print('/');
+  dataFile.print(now.month(),DEC);
+  dataFile.print('/');
+  dataFile.print(now.day(),DEC);
+  dataFile.println(" ");
+  dataFile.println("Celsius              Time");
+  dataFile.close();
 }
 
 void loop(void) {
   
-// read temperature
-pickUpTemperature();
-//read the time
+  // read temperature
+  pickUpTemperature();
+  //read the time
   now = RTC.now();
   
   //open file to log data in.
@@ -86,27 +89,21 @@ pickUpTemperature();
 
 // fuction with check the temperature sensor and update the tempeature. 
 void pickUpTemperature(){
-    byte i;
+  byte i;
   byte present = 0;
   byte type_s;
   byte data[12];
   byte addr[8];
  
   
-  if ( !ds.search(addr)) {
-    //Serial.println("No more addresses.");
-   //Serial.println();
-    ds.reset_search();
+  if ( !d_pin.search(addr)) {
+    
+    d_pin.reset_search();
     delay(250);
     return;
   }
   
-  //Serial.print("ROM =");
-  for( i = 0; i < 8; i++) {
-   // Serial.write(' ');
-   // Serial.print(addr[i], HEX);
-  }
-
+  
   if (OneWire::crc8(addr, 7) != addr[7]) {
       Serial.println("CRC is not valid!");
       return;
@@ -115,45 +112,40 @@ void pickUpTemperature(){
  
   // the first ROM byte indicates which chip
   switch (addr[0]) {
+    // for  Chip = DS18S20
     case 0x10:
-     // Serial.println("  Chip = DS18S20");  // or old DS1820
       type_s = 1;
       break;
+    // for  Chip = DS18B20
     case 0x28:
-    //  Serial.println("  Chip = DS18B20");
       type_s = 0;
       break;
+    // for  Chip = DS1822
     case 0x22:
-    //  Serial.println("  Chip = DS1822");
       type_s = 0;
       break;
+    
+    //Device is not a DS18x20 family
     default:
-   //   Serial.println("Device is not a DS18x20 family device.");
       return;
   } 
 
-  ds.reset();
-  ds.select(addr);
-  ds.write(0x44, 1);        // start conversion, with parasite power on at the end
+  d_pin.reset();
+  d_pin.select(addr);
+  d_pin.write(0x44, 1);        // start conversion, with parasite power on at the end
   
   delay(1000);     // maybe 750ms is enough, maybe not
   // we might do a ds.depower() here, but the reset will take care of it.
   
-  present = ds.reset();
-  ds.select(addr);    
-  ds.write(0xBE);         // Read Scratchpad
+  present = d_pin.reset();
+  d_pin.select(addr);    
+  d_pin.write(0xBE);         // Read Scratchpad
 
-  //Serial.print("  Data = ");
-  //Serial.print(present, HEX);
-  //Serial.print(" ");
+  
   for ( i = 0; i < 9; i++) {           // we need 9 bytes
-    data[i] = ds.read();
-   // Serial.print(data[i], HEX);
-   // Serial.print(" ");
+    data[i] = d_pin.read();
+   
   }
- // Serial.print(" CRC=");
- // Serial.print(OneWire::crc8(data, 8), HEX);
- // Serial.println();
 
   // Convert the data to actual temperature
   // because the result is a 16 bit signed integer, it should
@@ -175,11 +167,9 @@ void pickUpTemperature(){
     //// default is 12 bit resolution, 750 ms conversion time
   }
   celsius = (float)raw / 16.0;
-  fahrenheit = celsius * 1.8 + 32.0;
   Serial.print("  Temperature = ");
   Serial.print(celsius);
   Serial.print(" Celsius, ");
-  Serial.print(fahrenheit);
-  Serial.println(" Fahrenheit");
+  
   
 }
