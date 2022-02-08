@@ -2,5 +2,5 @@
     "board": "arduino:avr:uno",
     "programmer": "arduino:avrisp",
     "port": "COM5",
-    "sketch": "temp_sensoring_DS18B20\\ard_sketch\\sketch_feb03a\\sketch_feb03a.ino"
+    "sketch": "sensoring_display_ssd1306\\ard_sketch\\sketch_feb08a\\sketch_feb08a.ino"
 }

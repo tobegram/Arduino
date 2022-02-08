@@ -18,11 +18,10 @@
             "includePath": [
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino",
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\standard",
-                "E:\\Tombi\\Büro\\Eigenes\\Programmierung\\Coding\\GitHub\\Arduino\\libraries\\OneWire",
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries\\SPI\\src",
-                "C:\\Program Files (x86)\\Arduino\\libraries\\SD\\src",
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries\\Wire\\src",
-                "E:\\Tombi\\Büro\\Eigenes\\Programmierung\\Coding\\GitHub\\Arduino\\libraries\\RTClib\\src",
+                "E:\\Tombi\\Büro\\Eigenes\\Programmierung\\Coding\\GitHub\\Arduino\\libraries\\Adafruit_GFX_Library",
+                "E:\\Tombi\\Büro\\Eigenes\\Programmierung\\Coding\\GitHub\\Arduino\\libraries\\Adafruit_SSD1306",
                 "E:\\Tombi\\Büro\\Eigenes\\Programmierung\\Coding\\GitHub\\Arduino\\libraries\\Adafruit_BusIO",
                 "c:\\program files (x86)\\arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\7.3.0\\include",
                 "c:\\program files (x86)\\arduino\\hardware\\tools\\avr\\lib\\gcc\\avr\\7.3.0\\include-fixed",
