@@ -6,15 +6,13 @@
 #include <Wire.h>
 #include "RTClib.h"
 
-#define DHTPIN 2 //Der Sensor wird an PIN 2 angeschlossen    
-
-#define DHTTYPE DHT11    // Es handelt sich um den DHT11 Sensor
+// Konfiguration des DHT11 sensors
+#define DHTPIN 2 //Sensor auf Pin 2
+#define DHTTYPE DHT11    
+DHT dht(DHTPIN, DHTTYPE);
 
 //cs or the save select pin from the sd shield is connected to 10.
-const int chipSelect = 10; 
-
-//Der Sensor wird ab jetzt mit „dth“ angesprochen
-DHT dht(DHTPIN, DHTTYPE); 
+const int shield_pin = 10; 
 
 float celsius;
 RTC_DS1307 RTC;
@@ -35,10 +33,10 @@ void setup() {
     // uncomment it & upload to set the time, date and start run the RTC!
     RTC.adjust(DateTime(__DATE__, __TIME__));
   }
-  //setup SD card
+  
   // see if the SD card is present and can be initialized:
   Serial.print("Initializing SD card...");
-  if (!SD.begin(chipSelect)) {
+  if (!SD.begin(shield_pin)) {
     Serial.println("Card failed, or not present");
     // don't do anything more:
     return;
@@ -49,12 +47,14 @@ void setup() {
   dataFile = SD.open("datalog.csv", FILE_WRITE);
   dataFile.print("Datum");
   dataFile.print(",");
-  dataFile.println("Temperatur");
+  dataFile.print("Temperatur");
+  dataFile.print(",");
+  dataFile.println("Luftfeuchtigkeit");
 
   // doublecheck on serial monitor
-  Serial.print("Datum");
+  Serial.print("Temperatur");
   Serial.print(",");
-  Serial.println("Temperatur");
+  Serial.println("Luftfeuchtigkeit");
 
 }
 
@@ -66,12 +66,15 @@ void loop() {
   float Luftfeuchtigkeit = dht.readHumidity(); //die Luftfeuchtigkeit auslesen und unter „Luftfeutchtigkeit“ speichern
   
   float Temperatur = dht.readTemperature();//die Temperatur auslesen und unter „Temperatur“ speichern
-  
-  Serial.println(Temperatur);
-  Serial.println(Luftfeuchtigkeit);
-  
   //read the time
   now = RTC.now();
+
+ 
+  Serial.print(Temperatur);
+  Serial.print(",");
+  Serial.println(Luftfeuchtigkeit);
+  
+  
   
   //open file to log data in.
   dataFile = SD.open("datalog.csv", FILE_WRITE);
@@ -95,13 +98,13 @@ void loop() {
     dataFile.print(Temperatur);
     dataFile.print(",");
     dataFile.print(Luftfeuchtigkeit);
-    dataFile.print(",");
+    dataFile.println(",");
 
     dataFile.close();
   }
   // if the file isn't open, pop up an error:
   else {
-    Serial.println("error opening datalog.txt");
+    Serial.println("error opening datalog.csv (SD card??)");
   }
   //delay(60000); // this will log the temperature every minute.
   delay(3000);
