@@ -2,5 +2,5 @@
     "board": "arduino:avr:uno",
     "programmer": "arduino:avrisp",
     "port": "COM5",
-    "sketch": "sensoring_display_ssd1306\\ard_sketch\\sketch_feb08a\\sketch_feb08a.ino"
+    "sketch": "sensoring_temp_hum_DHT11\\libraries\\Adafruit_Unified_Sensor\\Adafruit_Sensor.cpp"
 }
