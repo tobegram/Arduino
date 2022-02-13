@@ -1,6 +1,6 @@
 #include <OneWire.h>
-#include <SPI.h>
-#include <SD.h>
+#include <SPI.h> // SPI Bus for communication with SD card
+#include <SD.h>   // libary for SD writing and Reading
 #include <Wire.h>
 #include "RTClib.h"
 
@@ -18,16 +18,9 @@ DateTime now;
 
 void setup(void) {
   Serial.begin(9600);
-  //setup clock
+
   Wire.begin();
-  RTC.begin();
-  //check if Real Time Clock is on
-  if (! RTC.isrunning()) {
-    Serial.println("RTC is NOT running!");
-    // following line sets the RTC to the date & time this sketch was compiled
-    // uncomment it & upload to set the time, date and start run the RTC!
-    RTC.adjust(DateTime(__DATE__, __TIME__));
-  }
+  
   //setup SD card
   // see if the SD card is present and can be initialized:
   Serial.print("Initializing SD card...");
