@@ -3,6 +3,7 @@ from shutil import which
 import matplotlib.pyplot as plt
 import csv
 from datetime import datetime
+from matplotlib.dates import DayLocator, HourLocator, DateFormatter, drange
 
 filename = 'sensoring_temp_hum_DHT11/data.csv'
 with open(filename) as file:
@@ -29,10 +30,10 @@ humx = fig.add_subplot(212)
 humx.plot(dates, hums, c='blue')
 humx.set_title("Feuchtekurve vom DHT11")
 
-# format the  temp-diagramm
-plt.xlabel('', fontsize=16)
+# format the temp-diagramm
+plt.xlabel('', fontsize=8)
 fig.autofmt_xdate()
-plt.tick_params(axis='both', which='major', labelsize=16)
+plt.tick_params(axis='both', which='major', labelsize=12)
 
 plt.show()
 
