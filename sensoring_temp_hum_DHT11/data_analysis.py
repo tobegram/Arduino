@@ -5,7 +5,11 @@ import csv
 from datetime import datetime
 from matplotlib.dates import DayLocator, HourLocator, DateFormatter, drange
 
-filename = 'sensoring_temp_hum_DHT11/data.csv'
+filename = 'sensoring_temp_hum_DHT11/arbeitszimmer.csv'
+#filename = 'sensoring_temp_hum_DHT11/küche.csv'
+#filename = 'sensoring_temp_hum_DHT11/schlafzimmer.csv'
+#filename = 'sensoring_temp_hum_DHT11/wohnzimmer.csv'
+
 with open(filename) as file:
     reader = csv.reader(file)
     header_row = next(reader)
