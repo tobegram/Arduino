@@ -1,3 +1,9 @@
+// Hardware: Arduino + DatenLogger Modul Data Recorder Shield
+// Temperature sensor: DS18B20; wires: 3,3V, Ground, DigitalPin 2
+// Display: OLED 128 x 64 SSD1306; wires 5V, Ground, SDA>>SDA, SCK>>SCL
+// 
+
+
 #include <GyverOLED.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
