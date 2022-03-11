@@ -44,7 +44,16 @@ void setup() {
   Serial.println("card initialized.");
   
   // write header into csv file
-  dataFile = SD.open("datalog.csv", FILE_WRITE);
+  dataFile = SD.open("arbeitszimmer.csv", FILE_WRITE);
+  //dataFile = SD.open("küche.csv", FILE_WRITE);
+  //dataFile = SD.open("schlafzimmer.csv", FILE_WRITE);
+  //dataFile = SD.open("wohnzimmer.csv", FILE_WRITE);
+  
+
+  
+
+  
+
   dataFile.print("Datum");
   dataFile.print(",");
   dataFile.print("Temperatur");
