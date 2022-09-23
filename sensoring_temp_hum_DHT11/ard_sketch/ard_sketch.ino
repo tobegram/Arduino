@@ -72,7 +72,7 @@ void loop() {
   delay(2000); //Zwei Sekunden Vorlaufzeit bis zur Messung (der Sensor ist etwas träge)
 
   
-  float Luftfeuchtigkeit = dht.readHumidity(); //die Luftfeuchtigkeit auslesen und unter „Luftfeutchtigkeit“ speichern
+  int Luftfeuchtigkeit = dht.readHumidity(); //die Luftfeuchtigkeit auslesen und unter „Luftfeutchtigkeit“ speichern
   
   float Temperatur = dht.readTemperature();//die Temperatur auslesen und unter „Temperatur“ speichern
   //read the time
